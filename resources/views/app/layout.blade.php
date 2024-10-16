@@ -28,6 +28,9 @@
             #msg, .msg{
                 margin-bottom:5px;
             }
+            .nk-content {
+                padding-top:5px;
+            }
         </style>
     </head>
     <body class="nk-body bg-lighter npc-general has-sidebar">

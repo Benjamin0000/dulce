@@ -17,19 +17,6 @@ class BranchController extends Controller implements HasMiddleware
             'auth'
         ];
     }
-
-    public static function upload_poster($file)
-    {
-        $fileSize = $file->getSize(); // size in bytes
-        $fileSizeInKB = $fileSize / 1024;
-        $maxSizeInKB = 200;
-
-        if ($fileSizeInKB > $maxSizeInKB) 
-            return ['error' => 'The image must not exceed 200KB in size.'];
-
-        $path = $file->storePublicly('images', 'public');
-        return ['path'=>$path];
-    }
     /**
      * Display a listing of the resource.
      */
@@ -53,21 +40,63 @@ class BranchController extends Controller implements HasMiddleware
         $data = $request->all(); 
         $poster = $request->file('poster'); 
 
-        $upload = self::upload_poster($poster); 
+        $upload = upload_poster($poster, 200); 
         if(isset($upload['error'])) return $upload; 
 
         $data['poster'] = $upload['path']; 
         Branch::create($data); 
         return ['success'=>"Branch created"]; 
     }
+    /**
+     * Assign manager to a branch. 
+     */
+    public function assign_manager(Request $request)
+    {
+        $request->validate([
+            'manager' => 'required',
+            'branch' => 'required',
+        ]);
+        $branch_id = $request->input('branch'); 
+        $manager_id = $request->input('manager'); 
 
+        $branch = Branch::find($branch_id); 
+        if(!$branch)
+            return ['error'=>"Branch does not exist"]; 
+
+        $manager = User::where([ ['id', $manager_id], ['role', 2] ])->first();
+        if(!$manager)
+            return  ['error'=>"Manager does not exist"]; 
+
+        if($current_branch = $manager->branch){
+            $branch_name = $current_branch->name; 
+            return ['error'=>"The selected manager has already been assigned branch $branch_name"];
+        }
+
+        $branch->manager_id = $manager->id; 
+        $branch->save(); 
+        return ['success'=>"Manager Assigned Successfully"]; 
+    }
+
+    public function unassign_manager($id)
+    {
+        $branch = Branch::findOrFail($id);
+        $branch->manager_id = NULL; 
+        $branch->save(); 
+        return back()->with('success', "Manager Unassigned"); 
+    }
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        $branch = Branch::findOrFail($id); 
-        return view('app.branches.show.index', compact('branch')); 
+        $branch = Branch::findOrFail($id);
+        $managers = User::where('role', 2);
+
+        if($ID = $branch->manager_id)
+            $managers->where('id', '<>', $ID);
+        
+        $managers = $managers->latest()->paginate(10); 
+        return view('app.branches.show.index', compact('branch', 'managers'));
     }
 
     /**
@@ -88,7 +117,7 @@ class BranchController extends Controller implements HasMiddleware
         if($request->hasFile('poster'))
         {
             $poster = $request->file('poster'); 
-            $upload = self::upload_poster($poster);
+            $upload = upload_poster($poster, 200);
 
             if(isset($upload['error'])) return $upload;
 
@@ -111,7 +140,7 @@ class BranchController extends Controller implements HasMiddleware
         return view('app.managers.index', compact('branches', 'managers')); 
     }
 
-    public function add_manager(Request $request)
+    public function create_manager(Request $request)
     {
         $request->validate([
             'name'=>"required|max:250",
@@ -144,6 +173,14 @@ class BranchController extends Controller implements HasMiddleware
         $name = $request->input('name');
         $username = $request->input('username');
         $password = $request->input('password'); 
+
+        $check = User::where([ 
+            ['username', $username], 
+            ['id', '<>', $id] 
+        ])->exists(); 
+        if($check)
+            return ['error'=>"Username already exists"]; 
+
         $user = User::where([ ['id', $id], ['role', 2] ])->first(); 
         $user->name = $name; 
         $user->username = $username; 
@@ -155,8 +192,17 @@ class BranchController extends Controller implements HasMiddleware
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy_manager(string $id)
     {
-        //
+        $manager = User::where([ ['id', $id], ['role', 2] ])->first(); 
+        if(!$manager) return back()->with('error', 'Manager not found');
+
+        $branch = Branch::where('manager_id', $id)->first();
+        if($branch){
+            $branch->manager_id = NULL; 
+            $branch->save(); 
+        }
+        $manager->delete(); 
+        return back()->with('success', 'Manager Deleted'); 
     }
 }

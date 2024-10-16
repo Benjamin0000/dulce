@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('state'); 
             $table->string('city'); 
             $table->string('address', 500); 
+            $table->integer('manager_id')->nullable(); 
             $table->timestamps();
         });
     }

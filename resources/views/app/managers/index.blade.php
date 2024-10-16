@@ -16,7 +16,7 @@
                         <th>Name</th>
                         <th>Branch</th>
                         <th>Created</th>
-                        <th>Action</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,19 +26,23 @@
                             <td>{{$no++}}</td>
                             <td>
                                 {{$manager->name}}
-                                <div>@{{$manager->username}}</div>
+                                <div>{{'@'.$manager->username}}</div>
                             </td>
-                            <td></td>
+                            <td>
+                                @if($manager->branch)
+                                    {{$manager->branch->name}}
+                                @else 
+                                    <span class="badge bg-danger">Not Assigned</span>
+                                @endif 
+                            </td>
                             <td>
                                 {{$manager->created_at->isoFormat('lll')}}
                                 <div>{{$manager->created_at->diffForHumans()}}</div> 
                             </td>
                             <td>
-                                <button data-bs-toggle="modal" data-bs-target="#update_manager{{$manager->id}}" class="btn btn-primary btn-sm">Update</button>
-                                <form action="" method="POST" style="display: inline">
-                                    @csrf 
-                                    <button class="btn btn-danger btn-sm">Delete</button>
-                                </form>
+                                <button data-bs-toggle="modal" data-bs-target="#update_manager{{$manager->id}}" class="btn btn-outline-primary btn-sm"><i class="fa fa-edit"></i></button>
+                                <button data-bs-toggle="modal" data-bs-target="#delete_manager{{$manager->id}}" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                @include('app.managers.delete_modal')
                                 @include('app.managers.update_modal')
                             </td>
                         </tr>

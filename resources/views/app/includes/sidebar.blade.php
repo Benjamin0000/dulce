@@ -25,30 +25,26 @@
                             <span class="nk-menu-icon"><em class="icon ni ni-layers-fill"></em></span><span class="nk-menu-text">Branches</span>
                         </a>
                     </li>
+                    
                     <li class="nk-menu-item">
                         <a href="{{route('admin.managers.index')}}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span><span class="nk-menu-text">Managers</span>
                         </a>
                     </li>
  
-                    <li class="nk-menu-item">
-                        <a href="" class="nk-menu-link">
+                    
+                    <li class="nk-menu-item has-sub">
+                        <a href="#" class="nk-menu-link nk-menu-toggle">
                             <span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span><span class="nk-menu-text">Items</span>
                         </a>
-                    </li>
-                    {{-- <li class="nk-menu-item has-sub">
-                        <a href="index.html#" class="nk-menu-link nk-menu-toggle">
-                            <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span><span class="nk-menu-text">Lead</span>
-                        </a>
                         <ul class="nk-menu-sub">
-                            <li class="nk-menu-item">
-                                <a href="people.html" class="nk-menu-link"><span class="nk-menu-text">People</span></a>
-                            </li>
-                            <li class="nk-menu-item">
-                                <a href="organizations.html" class="nk-menu-link"><span class="nk-menu-text">Organization</span></a>
-                            </li>
+                            @foreach(get_branches() as $key=>$name)
+                                <li class="nk-menu-item">
+                                    <a href="{{route('admin.items.index', $key)}}" class="nk-menu-link"><span class="nk-menu-text">{{$name}}</span></a>
+                                </li>
+                           @endforeach
                         </ul>
-                    </li> --}}
+                    </li>
 
                     {{-- <li class="nk-menu-item has-sub">
                         <a href="index.html#" class="nk-menu-link nk-menu-toggle">

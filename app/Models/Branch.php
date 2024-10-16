@@ -16,4 +16,9 @@ class Branch extends Model
         'city',
         'address'
     ]; 
+
+    public function manager()
+    {
+        return $this->belongsTo(User::class, 'manager_id');
+    }
 }

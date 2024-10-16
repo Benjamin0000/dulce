@@ -3,62 +3,121 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Support\Facades\Storage; 
+use App\Models\Branch; 
+use App\Models\User; 
+use App\Models\Item; 
 
-class ItemController extends Controller
+class ItemController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            'auth'
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(string $branch_id, string $parent_id=NULL)
     {
-        //
+        $branch = Branch::findOrFail($branch_id); 
+        $titles = [];
+        $parent = NULL; 
+        if($parent_id) {
+            $items = Item::where([
+                ['branch_id', $branch_id],  
+                ['parent_id', $parent_id]
+            ])->paginate(20);
+            $titles = get_item_category_gen($parent_id);
+            $parent = Item::find($parent_id); 
+        }else {
+            $items = Item::where('branch_id', $branch_id)
+            ->whereNull('parent_id')->paginate(20);
+        }
+        return view('app.items.index', compact('branch', 'items', 'parent_id', 'titles', 'parent')); 
     }
-
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create_item(Request $request)
     {
-        //
+        $type = (int)$request->input('type');
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'logo' => 'required|mimes:jpeg,png,jpg,gif,webp',
+        ]);
+        $response_name = "Category"; 
+        if($type == ITEM){
+            $request->validate([
+                'cost_price'=>'required',
+                'selling_price'=>'required'
+            ]);
+            $cost_price = (float)$request->input('cost_price'); 
+            $selling_price = (float)$request->input('selling_price'); 
+            if($cost_price > $selling_price)
+                return ['error'=>"The selling price must be greater than the cost price"]; 
+            $response_name = "Item"; 
+        }
+        $logo = $request->file('logo');
+        $upload = upload_poster($logo, 100);
+        if(isset($upload['error'])) return $upload;
+        $logo = $upload['path'];
+        $data = $request->all(); 
+        $data['logo'] = $logo; 
+        Item::create($data); 
+        return ['success'=>"$response_name added"];    
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function update_item(Request $request)
     {
-        //
+        $type = (int)$request->input('type');
+        $id = (int)$request->input('id'); 
+        $item = Item::findOrFail($id); 
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'logo' => 'nullable|mimes:jpeg,png,jpg,gif,webp',
+        ]);
+        $response_name = "Category"; 
+        if($type == ITEM){
+            $request->validate([
+                'cost_price'=>'required',
+                'selling_price'=>'required'
+            ]);
+            $cost_price = (float)$request->input('cost_price'); 
+            $selling_price = (float)$request->input('selling_price'); 
+            if($cost_price > $selling_price)
+                return ['error'=>"The selling price must be greater than the cost price"]; 
+            $response_name = "Item"; 
+        }
+        
+        $data = $request->all();
+        $logo = $request->file('logo');
+        if($logo){
+            $upload = upload_poster($logo, 100);
+            if(isset($upload['error'])) return $upload;
+            $logo = $upload['path'];
+            $data['logo'] = $logo; 
+
+            if(Storage::disk('public')->exists($item->logo))
+                Storage::disk('public')->delete($item->logo);
+        }
+        $item->update($data); 
+        return ['success'=>"$response_name updated"];    
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function delete_item($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $item = Item::findOrFail($id); 
+        if($item->type == CATEGORY && $item->has_children())
+            return back()->with('error', "You can't delete a category with items. Delete the items in the category first"); 
+        
+        if(Storage::disk('public')->exists($item->logo))
+            Storage::disk('public')->delete($item->logo);
+        $item->delete(); 
+        return back()->with('success', "Item deleted"); 
     }
 }
