@@ -13,16 +13,16 @@ return new class extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->id();
-            $table->integer('branch_id'); 
+            $table->integer('branch_id')->indexed(); 
             $table->string('name');
             $table->string('logo')->nullable();
-            $table->integer('parent_id')->nullable();
+            $table->integer('parent_id')->nullable()->indexed();
             $table->decimal('cost_price', 65, 2)->default(0);
             $table->decimal('selling_price', 65, 2)->default(0);
             $table->integer('total')->default(0);
             $table->integer('sold')->default(0);  
             $table->boolean('type')->default(0); 
-            $table->text('add_ons')->nullable(); 
+            // $table->text('add_ons')->nullable(); 
             $table->timestamps();
         });
     }

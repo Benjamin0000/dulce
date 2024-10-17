@@ -151,5 +151,69 @@
                 }
             });
         })
+
+
+        $(document).on('submit', ".add_addons_form", function(e){
+            e.preventDefault(); // Prevent the default form submission
+            var form = $(e.currentTarget);
+            var msg = form.find('.msg'); 
+            var btn = form.find('button'); 
+            var btn_content = btn.text(); 
+            msg.html(''); 
+            loadButton(btn)
+            var formData = new FormData(form[0]); // Create FormData object with form elements
+            $.ajax({
+                type: 'POST',
+                url: '{{route('admin.items.add_addon')}}', // Replace with your server endpoint
+                data: formData,
+                contentType: false, // Required for file upload
+                processData: false, // Don't process the files
+                success: function (res) {
+                    unLoadButton(btn, btn_content)
+                    if(res.error){
+                        msg.html('<p class="alert alert-danger">&#9432; '+res.error+'</p>');
+                    }else if(res.id){
+                        msg.html('<p class="alert alert-success">Addon added</p>');
+                        $("#addon_body"+res.id).html(res.view); 
+                    }
+                },
+                error: function (xhr, status, error) {
+                    unLoadButton(btn, btn_content);
+                    if (xhr.status === 0) {
+                        msg.html("<div class='alert alert-danger'><i class='fa-solid fa-circle-info'></i> Network error: Please check your internet connection.</div>");
+                        // This indicates the error is likely caused by no internet connection
+                    } else {
+                        msg.html("<div class='alert alert-danger'><i class='fa-solid fa-circle-info'></i> Something went wrong please try again</div>");
+                    }
+                }
+            });
+        })
+
+        $(document).on('click', '.remove_addon', function(e){
+            var btn = $(e.currentTarget);
+            var id = $(btn).attr('data');
+            var btn_content = btn.html();
+            $.ajax({
+                type: 'post',
+                url: '{{route('admin.items.remove_addon')}}', // Replace with your server endpoint
+                data: {'id': id},
+                success: function (res) {
+                    unLoadButton(btn, btn_content)
+                    if(res.error){
+                        Swal.fire(res.error,'','error')
+                    }else if(res.id){
+                        $("#addon_body"+res.id).html(res.view); 
+                    }
+                },
+                error: function (xhr, status, error) {
+                    unLoadButton(btn, btn_content);
+                    if (xhr.status === 0) {
+                        Swal.fire("Network error: Please check your internet connection.",'','error')
+                    } else {
+                        Swal.fire("Something went wrong please try again",'','error')
+                    }
+                }
+            });
+        })
     }
 </script>

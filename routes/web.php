@@ -35,3 +35,6 @@ Route::get('/items/{branch_id}/{parent_id?}', [ItemController::class, 'index'])-
 Route::post('/items/create', [ItemController::class, 'create_item'])->name('admin.items.create_item'); 
 Route::post('/items/update', [ItemController::class, 'update_item'])->name('admin.items.update_item');
 Route::delete('/items/{id}', [ItemController::class, 'delete_item'])->name('admin.items.delete'); 
+
+Route::post('/add-addons', [ItemController::class, 'add_addon'])->name('admin.items.add_addon'); 
+Route::post('/remove-addons', [ItemController::class, 'remove_addon'])->name('admin.items.remove_addon'); 

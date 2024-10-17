@@ -1,9 +1,11 @@
 <?php 
 use App\Models\Item; 
 use App\Models\Branch; 
+use App\Models\Addon; 
 
 CONST CATEGORY = 0; 
 CONST ITEM = 1; 
+CONST BRANCH = 2; 
 
 function format_with_cur($amt)
 {
@@ -48,4 +50,40 @@ function get_item_category_gen(string $parent_id, array $gens=[])
 function get_branches()
 {
     return Branch::pluck('name', 'id')->all();
+}
+
+function get_addons()
+{
+    $valid_adons = []; 
+    $items = Item::where('type', CATEGORY)->get();
+    $total = 0; 
+    foreach($items as $item){
+        $has_items = Item::where([ ['parent_id', $item->id], ['type', ITEM] ])->exists(); 
+        if($has_items){
+            $valid_adons[] = $item;
+            $total+=1; 
+        }
+        if($total >= 100) 
+            break; 
+    }
+    return $valid_adons; 
+}
+
+
+function delete_addons($type, $id)
+{
+    switch($type){
+        case BRANCH: 
+            $addons = Addon::where('branch_id', $id)->get(); 
+            break; 
+        case ITEM: 
+            $addons = Addon::where('item_id', $id)->get();
+            break; 
+        case CATEGORY:
+            $addons = Addon::where('category', $id)->get();
+            break; 
+    }
+    foreach($addons as $addon){
+        $addon->delete(); 
+    }
 }

@@ -28,4 +28,9 @@ class Item extends Model
     {
         return self::where('parent_id', $this->id)->exists();
     }
+
+    public function addons()
+    {
+        return $this->hasMany(Addon::class, 'item_id'); 
+    }
 }

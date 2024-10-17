@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Branch; 
 use App\Models\User; 
 use App\Models\Item; 
+use App\Models\Addon; 
 
 class ItemController extends Controller implements HasMiddleware
 {
@@ -117,7 +118,64 @@ class ItemController extends Controller implements HasMiddleware
         
         if(Storage::disk('public')->exists($item->logo))
             Storage::disk('public')->delete($item->logo);
+
+        if($item->type == CATEGORY){
+            delete_addons(CATEGORY, $id);
+        }elseif($item->type == ITEM){
+            delete_addons(ITEM, $id);
+        }
         $item->delete(); 
         return back()->with('success', "Item deleted"); 
+    }
+
+    public function add_addon(Request $request)
+    {
+        $request->validate([
+            'question'=>['required', 'max:255'],
+            'category'=>['required', 'max:255', 'exists:items,id'],
+            'branch_id'=>['required', 'max:255', 'exists:branches,id'],
+            'item_id'=>['required', 'max:255', 'exists:items,id']
+        ]); 
+
+        $branch_id = $request->input('branch_id'); 
+        $item_id = $request->input('item_id'); 
+        $category = $request->input('category'); 
+        $question = $request->input('question');
+
+        $check = Addon::where([
+            ['branch_id', $branch_id],
+            ['item_id', $item_id],
+            ['category', $category]
+        ])->exists();
+
+        if($check)
+            return ['error'=>'Already added']; 
+
+        Addon::create([
+            'branch_id'=>$branch_id,
+            'item_id'=>$item_id, 
+            'category'=>$category,
+            'title'=>$question
+        ]); 
+        $addons = Addon::where('item_id', $item_id)->get();
+        $view = view('app.items.add_ons_tbody', compact('addons')); 
+        return ['success'=>'Add-on Added', 'view'=>"$view", 'id'=>$item_id]; 
+    }
+
+    public function remove_addon(Request $request)
+    {
+        $request->validate([
+            'id'=>['required', 'max:255']
+        ]); 
+        $id = $request->input('id');
+        $addon = Addon::find($id); 
+        if($addon){
+            $item_id = $addon->item_id; 
+            $addon->delete();
+            $addons = Addon::where('item_id', $item_id)->get();
+            $view = view('app.items.add_ons_tbody', compact('addons')); 
+            return ['success'=>'Deleted', 'view'=>"$view", 'id'=>$item_id]; 
+        }
+        return ['error'=>'Not Found']; 
     }
 }
