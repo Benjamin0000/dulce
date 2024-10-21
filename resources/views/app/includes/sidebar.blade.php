@@ -46,6 +46,19 @@
                         </ul>
                     </li>
 
+                    <li class="nk-menu-item has-sub">
+                        <a href="#" class="nk-menu-link nk-menu-toggle">
+                            <span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span><span class="nk-menu-text">Stocks</span>
+                        </a>
+                        <ul class="nk-menu-sub">
+                            @foreach(get_branches() as $key=>$name)
+                                <li class="nk-menu-item">
+                                    <a href="{{route('admin.stock.index', $key)}}" class="nk-menu-link"><span class="nk-menu-text">{{$name}}</span></a>
+                                </li>
+                           @endforeach
+                        </ul>
+                    </li>
+
                     {{-- <li class="nk-menu-item has-sub">
                         <a href="index.html#" class="nk-menu-link nk-menu-toggle">
                             <span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span><span class="nk-menu-text">Sales</span>

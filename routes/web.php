@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BranchController; 
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\FrontController; 
+use App\Http\Controllers\StockController; 
 
 
 Route::get('/', function () {
@@ -38,3 +39,7 @@ Route::delete('/items/{id}', [ItemController::class, 'delete_item'])->name('admi
 
 Route::post('/add-addons', [ItemController::class, 'add_addon'])->name('admin.items.add_addon'); 
 Route::post('/remove-addons', [ItemController::class, 'remove_addon'])->name('admin.items.remove_addon'); 
+
+
+Route::get('/stocks/{branch_id}', [StockController::class, 'index'])->name('admin.stock.index'); 
+Route::post('/update-stocks', [StockController::class, 'update_stock'])->name('admin.stock.update'); 

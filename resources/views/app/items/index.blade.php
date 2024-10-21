@@ -38,7 +38,7 @@
                                 {{$item->name}}
                             </td>
                             <td>
-                                @if($item->cost_price > 0)
+                                @if($item->type == ITEM)
                                     <div>Cost Price : {{format_with_cur($item->cost_price)}}</div>
                                     <div>Selling Price: {{format_with_cur($item->selling_price)}}</div>
                                 @else 
