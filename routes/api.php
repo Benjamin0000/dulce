@@ -9,3 +9,5 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/get-category', [ApiController::class, 'get_branches']); 
+
+Route::get('/get-items/{id}', [ApiController::class, 'get_more_items']);
