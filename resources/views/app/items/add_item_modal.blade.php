@@ -41,6 +41,12 @@
                             </div>
                         </div>
                     </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="">Short Description (optional)</label>
+                        <textarea name="description" class="form-control desc" placeholder="Write a short note for buyers"></textarea>
+                    </div>
+
                     @csrf
                     <input type="hidden" name="type" value="1">
                     <input type="hidden" name="branch_id" value="{{$branch->id}}">

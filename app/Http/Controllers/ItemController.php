@@ -18,7 +18,6 @@ class ItemController extends Controller implements HasMiddleware
             'auth'
         ];
     }
-
     /**
      * Display a listing of the resource.
      */
@@ -49,7 +48,9 @@ class ItemController extends Controller implements HasMiddleware
         $request->validate([
             'name' => 'required|string|max:255',
             'logo' => 'required|mimes:jpeg,png,jpg,gif,webp',
+            'description'=> 'nullable|max:255',
         ]);
+        $description = $request->input('description'); 
         $response_name = "Category"; 
         if($type == ITEM){
             $request->validate([
@@ -67,6 +68,7 @@ class ItemController extends Controller implements HasMiddleware
         if(isset($upload['error'])) return $upload;
         $logo = $upload['path'];
         $data = $request->all(); 
+        $data['des'] = $description; 
         $data['logo'] = $logo; 
         Item::create($data); 
         return ['success'=>"$response_name added"];    
@@ -77,9 +79,11 @@ class ItemController extends Controller implements HasMiddleware
         $type = (int)$request->input('type');
         $id = (int)$request->input('id'); 
         $item = Item::findOrFail($id); 
+        $description = $request->input('description');
 
         $request->validate([
             'name' => 'required|string|max:255',
+            'description'=> 'nullable|max:255',
             'logo' => 'nullable|mimes:jpeg,png,jpg,gif,webp',
         ]);
         $response_name = "Category"; 
@@ -106,6 +110,8 @@ class ItemController extends Controller implements HasMiddleware
             if(Storage::disk('public')->exists($item->logo))
                 Storage::disk('public')->delete($item->logo);
         }
+
+        $data['des'] = $description; 
         $item->update($data); 
         return ['success'=>"$response_name updated"];    
     }

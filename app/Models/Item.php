@@ -16,7 +16,8 @@ class Item extends Model
         'parent_id',
         'cost_price',
         'selling_price',
-        'type'
+        'type',
+        'des'
     ]; 
 
     public function total_childeren()

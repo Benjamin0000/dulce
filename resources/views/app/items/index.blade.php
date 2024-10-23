@@ -36,6 +36,12 @@
                             <td><img width="50" src="{{Storage::url($item->logo)}}" alt=""></td>
                             <td>
                                 {{$item->name}}
+                                @if($item->type == ITEM)
+                                    <div><b>Short Note</b></div>
+                                    <div>
+                                        {{$item->des}}
+                                    </div>
+                                @endif 
                             </td>
                             <td>
                                 @if($item->type == ITEM)

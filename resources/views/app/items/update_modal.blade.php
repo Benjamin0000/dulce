@@ -41,6 +41,11 @@
                                 </div>
                             </div>
                         </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="">Short Description (optional)</label>
+                            <textarea name="description" placeholder="Write a short note for buyers" class="form-control desc">{{$item->des}}</textarea>
+                        </div>
                     @endif 
                     <input type="hidden" name="id" value="{{$item->id}}">
                     <input type="hidden" name="type" value="{{$item->type}}">
