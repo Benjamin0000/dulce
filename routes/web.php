@@ -5,11 +5,16 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\FrontController; 
 use App\Http\Controllers\StockController; 
+use App\Http\Controllers\SettingsController; 
 
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/payment/{order_id}', [FrontController::class, 'payment']); 
+
+
 
 Route::get('/login', [FrontController::class, 'login_page'])->name('login'); 
 Route::post('/login', [FrontController::class, 'login'])->name('login'); 
@@ -29,8 +34,6 @@ Route::post('/assign-manager', [BranchController::class, 'assign_manager'])->nam
 Route::put('/unassign-manager/{id}', [BranchController::class, 'unassign_manager'])->name('admin.manager.unassign'); 
 
 
-
-
 #adding items
 Route::get('/items/{branch_id}/{parent_id?}', [ItemController::class, 'index'])->name('admin.items.index');
 Route::post('/items/create', [ItemController::class, 'create_item'])->name('admin.items.create_item'); 
@@ -43,3 +46,6 @@ Route::post('/remove-addons', [ItemController::class, 'remove_addon'])->name('ad
 
 Route::get('/stocks/{branch_id}', [StockController::class, 'index'])->name('admin.stock.index'); 
 Route::post('/update-stocks', [StockController::class, 'update_stock'])->name('admin.stock.update'); 
+
+Route::get('/settings/{branch_id}', [SettingsController::class, 'index'])->name('admin.settings.index'); 
+Route::post('/settings/{branch_id}/set-location', [SettingsController::class, 'set_location'])->name('admin.set_branch_location'); 

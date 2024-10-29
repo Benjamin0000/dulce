@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;  
 use Illuminate\Routing\Controllers\HasMiddleware;
 use App\Models\User;
+use App\Models\Order; 
 
 class FrontController extends Controller implements HasMiddleware
 {
@@ -49,5 +50,11 @@ class FrontController extends Controller implements HasMiddleware
         
         Auth::login($user); 
         return redirect(route('admin.dashboard.index')); 
+    }
+
+    public function payment($order_id)
+    {
+        $order = Order::where('orderID', $order_id)->first(); 
+        return view('monify_payment', compact('order')); 
     }
 }
