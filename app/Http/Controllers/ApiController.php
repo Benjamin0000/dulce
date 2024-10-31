@@ -7,26 +7,41 @@ use App\Models\Branch;
 use Illuminate\Support\Facades\Storage; 
 use App\Models\Item; 
 use App\Models\Addon; 
+use App\Models\Discount; 
+use App\Models\Location; 
 
 class ApiController extends Controller
 {
 
-    public function get_branches()
-    {
-        // $branches = Branch::all(); 
-        // foreach ($branches as $branch) {
-        //     $branch->poster = asset(Storage::url($branch->poster));
-        // }
-        // return $branches;
-        $items = Item::whereNull('parent_id')->get(); 
+    public function get_branches(string $branch_id = null)
+    { 
+        $branches = Branch::all(); 
+        foreach ($branches as $branch) {
+            $branch->poster = asset(Storage::url($branch->poster));
+        }
+
+        $branch = null; 
+        $items = []; 
+
+        if($branch_id){
+            if( $branch = Branch::find($branch_id) )
+                $branch->poster = asset(Storage::url($branch->poster));
+        }
+
+        if(!$branch && isset($branches[0]))
+            $branch = $branches[0]; 
+
+        if($branch)
+            $items = Item::where('branch_id', $branch->id)->whereNull('parent_id')->get(); 
 
         foreach($items as $item){
             $item->logo = asset(Storage::url($item->logo));
         }
-        return $items; 
 
-        // $branch = Branch::first(); 
-        // $branch->poster = asset(Storage::url($branch->poster));
+        return [
+            'items'=>$item,
+            'branches'=>$branches
+        ]; 
     }
 
     public function get_more_items(string $parent_id)
@@ -66,6 +81,35 @@ class ApiController extends Controller
         }
         return ['item'=>'']; 
     }
+
+    public function get_delivery_cost(Request $request)
+    {
+        
+    }
+
+    public function validate_discount_code(Request $request)
+    {
+        $request->validate([
+            'code'=>['required'], 
+            'branch_id'=>['required']
+        ]); 
+
+        $code = $request->input('code');
+        $branch_id = $request->input('branch_id'); 
+
+        $discount = Discount::where([
+            ['code', $code], 
+            ['branch_id', $branch_id], 
+            ['expiry_date', '>', now()]
+        ])->first(); 
+
+        if($discount){
+            return $discount; 
+        }
+
+        return ['error'=>"Invalid code"]; 
+    }
+
 
     public function process_order(Request $request)
     {

@@ -8,8 +8,12 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/get-category', [ApiController::class, 'get_branches']); 
+Route::get('/get-category/{branch_id?}', [ApiController::class, 'get_branches']); 
 Route::get('/get-items/{id}', [ApiController::class, 'get_more_items']);
 Route::get('/get-item/{id}', [ApiController::class, 'get_item']); 
+
+
+
+
 
 Route::post('/process-order', [ApiController::class, 'process_order']); 

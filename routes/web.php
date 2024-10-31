@@ -47,5 +47,16 @@ Route::post('/remove-addons', [ItemController::class, 'remove_addon'])->name('ad
 Route::get('/stocks/{branch_id}', [StockController::class, 'index'])->name('admin.stock.index'); 
 Route::post('/update-stocks', [StockController::class, 'update_stock'])->name('admin.stock.update'); 
 
+#settings
 Route::get('/settings/{branch_id}', [SettingsController::class, 'index'])->name('admin.settings.index'); 
-Route::post('/settings/{branch_id}/set-location', [SettingsController::class, 'set_location'])->name('admin.set_branch_location'); 
+Route::post('/settings/{branch_id}/set-location', [SettingsController::class, 'set_location'])->name('admin.set_branch_location');
+Route::post('/settings/{branch_id}/set-vat', [SettingsController::class, 'set_vat'])->name('admin.set_vat'); 
+#discount code
+Route::post('/settings/create-discount/{branch_id}', [SettingsController::class, 'create_discount'])->name('admin.create_discount'); 
+Route::delete('/settings/delete-discount/{id}', [SettingsController::class, 'delete_discount'])->name('admin.delete_discount'); 
+Route::get('/settings/load_discount/{branch_id}', [SettingsController::class, 'load_more_discounts'])->name('admin.load_more_discounts'); 
+#delivery cost
+Route::post('/settings/create-delivery-cost/{branch_id}', [SettingsController::class, 'create_delivery_cost'])->name('admin.create_delivery_cost'); 
+Route::post('/settings/create-location/{branch_id}', [SettingsController::class, 'create_location'])->name('admin.create_location');
+Route::delete('/settings/delete-location/{id}', [SettingsController::class, 'delete_location'])->name('admin.delete_location');
+Route::get('/settings/load_location/{branch_id}', [SettingsController::class, 'load_more_location'])->name('admin.load_more_location'); 
