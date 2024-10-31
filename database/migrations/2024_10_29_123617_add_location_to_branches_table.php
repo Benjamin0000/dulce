@@ -12,9 +12,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Add POINT column with default value POINT(0 0)
-        DB::statement("ALTER TABLE branches ADD location POINT NOT NULL DEFAULT ST_GeomFromText('POINT(0 0)')");
+        // Step 1: Create the location column without a default value
+        DB::statement("ALTER TABLE branches ADD location POINT NOT NULL");
+
+        // Step 2: Set default value to POINT(0 0) for existing records
+        DB::statement("UPDATE branches SET location = ST_GeomFromText('POINT(0 0)') WHERE location IS NULL");
+
+        // Add spatial index
         DB::statement("ALTER TABLE branches ADD SPATIAL INDEX location_spatial_index(location)");
+
         Schema::table('branches', function (Blueprint $table) {
             $table->decimal('vat', 65, 3)->default(0); 
             $table->decimal('cost_per_km', 65, 2)->default(0); 
