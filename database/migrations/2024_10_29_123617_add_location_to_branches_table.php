@@ -13,18 +13,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('branches', function (Blueprint $table) {
-            // Add the new vat column
+            // Add columns for VAT, cost per km, and max km
             $table->decimal('vat', 65, 3)->default(0); 
             $table->decimal('cost_per_km', 65, 2)->default(0); 
             $table->decimal('max_km', 65, 2)->default(0);
 
-            // Add the location column with a default value
-            // You can either add the column in this way or separate it into its own statement
-            DB::statement('ALTER TABLE branches ADD location POINT NOT NULL DEFAULT ST_GeomFromText(\'POINT(0 0)\')');
+            // Add location column as POINT type, nullable
+            $table->point('location')->nullable();
 
-            // Add the spatial index on the location column
+            // Add spatial index on location column
             DB::statement('ALTER TABLE branches ADD SPATIAL INDEX location_spatial_index(location)');
         });
+
+        // Optionally, set location to POINT(0 0) for existing records
+        DB::table('branches')->whereNull('location')->update([
+            'location' => DB::raw("ST_GeomFromText('POINT(0 0)')")
+        ]);
     }
 
     /**
@@ -33,7 +37,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('branches', function (Blueprint $table) {
-            // Drop the vat column
             $table->dropColumn('vat'); 
             $table->dropColumn('cost_per_km'); 
             $table->dropColumn('max_km'); 
@@ -42,7 +45,7 @@ return new class extends Migration
             DB::statement('ALTER TABLE branches DROP INDEX location_spatial_index');
 
             // Drop the location column
-            DB::statement('ALTER TABLE branches DROP COLUMN location');
+            $table->dropColumn('location');
         });
     }
 };
