@@ -45,7 +45,6 @@ class BranchController extends Controller implements HasMiddleware
         if(isset($upload['error'])) return $upload; 
 
         $data['poster'] = $upload['path']; 
-        $data['location'] = DB::raw("ST_GeomFromText('POINT(0 0)')"); 
         Branch::create($data); 
         return ['success'=>"Branch created"]; 
     }
