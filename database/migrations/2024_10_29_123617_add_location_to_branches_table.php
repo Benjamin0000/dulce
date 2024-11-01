@@ -9,15 +9,17 @@ return new class extends Migration
 {
     public function up(): void
     {
+        // Add the POINT column with default 'POINT(0 0)' via raw SQL
+        DB::statement("ALTER TABLE branches ADD location POINT NOT NULL DEFAULT ST_GeomFromText('POINT(0 0)')");
+
+        // Optional: Add a spatial index
+        DB::statement("ALTER TABLE branches ADD SPATIAL INDEX location_spatial_index(location)");
+        
         Schema::table('branches', function (Blueprint $table) {
-            // Define the location column as nullable
-            DB::statement("ALTER TABLE branches ADD location POINT NULL DEFAULT ST_GeomFromText('POINT(0 0)')");
             $table->decimal('vat', 65, 3)->default(0); 
             $table->decimal('cost_per_km', 65, 2)->default(0); 
             $table->decimal('max_km', 65, 2)->default(0);
         });
-        // Optional: Add a spatial index if needed
-        DB::statement("ALTER TABLE branches ADD SPATIAL INDEX location_spatial_index(location)");
     }
 
     public function down(): void
@@ -25,7 +27,7 @@ return new class extends Migration
         Schema::table('branches', function (Blueprint $table) {
             $table->dropColumn('vat'); 
             $table->dropColumn('cost_per_km'); 
-            $table->dropColumn('max_km'); 
+            $table->dropColumn('max_km');
         });
 
         DB::statement("ALTER TABLE branches DROP INDEX location_spatial_index");

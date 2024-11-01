@@ -15,7 +15,8 @@ class Branch extends Model
         'poster', 
         'state',
         'city',
-        'address'
+        'address',
+        'location'
     ]; 
 
     public function manager()

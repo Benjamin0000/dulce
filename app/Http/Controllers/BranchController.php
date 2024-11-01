@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\Storage; 
+use Illuminate\Support\Facades\DB; 
 use App\Models\Branch; 
 use App\Models\User; 
 
@@ -44,6 +45,7 @@ class BranchController extends Controller implements HasMiddleware
         if(isset($upload['error'])) return $upload; 
 
         $data['poster'] = $upload['path']; 
+        $data['location'] = DB::raw("ST_GeomFromText('POINT(0 0)')"); 
         Branch::create($data); 
         return ['success'=>"Branch created"]; 
     }
