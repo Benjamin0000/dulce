@@ -39,7 +39,7 @@ class ApiController extends Controller
         }
 
         return [
-            'items'=>$item,
+            'items'=>$items,
             'branches'=>$branches
         ]; 
     }
@@ -84,7 +84,7 @@ class ApiController extends Controller
 
     public function get_delivery_cost(Request $request)
     {
-        
+
     }
 
     public function validate_discount_code(Request $request)
