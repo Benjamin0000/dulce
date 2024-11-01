@@ -204,7 +204,7 @@ function getUserLocation() {
                         '',
                         'success'
                     )
-                    // window.location.reload(); 
+                    window.location.reload(); 
                 }else{
                     Swal.fire(
                         'No location data was set',
