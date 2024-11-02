@@ -74,11 +74,13 @@ class SettingsController extends Controller implements HasMiddleware
         $request->validate([
             'code'=>['required', 'max:100'],
             'days'=>['required', 'max:100'],
-            'min_purchase'=>['required', 'max:100']
+            'min_purchase'=>['required', 'max:100'], 
+            'pct'=>['required']
         ]); 
         $code = $request->input('code'); 
         $days = (int)$request->input('days');
         $min_purchase = $request->input('min_purchase'); 
+        $pct = $request->input('pct');
 
         if( Discount::where('code', $code)->exists())
             return ['error'=>'discount code already exists']; 
@@ -87,7 +89,8 @@ class SettingsController extends Controller implements HasMiddleware
             'branch_id'=>$branch_id,
             'code'=>$code, 
             'min_purchase'=>$min_purchase, 
-            'expiry_date'=>now()->addDays($days)
+            'expiry_date'=>now()->addDays($days),
+            'pct'=>$pct 
         ]); 
         return ['success'=>'Discount created']; 
     }

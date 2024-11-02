@@ -13,7 +13,8 @@ class Discount extends Model
         'branch_id',
         'code',
         'expiry_date',
-        'min_purchase'
+        'min_purchase',
+        'pct'
     ]; 
 
     /**
@@ -37,6 +38,7 @@ class Discount extends Model
         'expiry_date',
         'total_usage',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'branch_id'
     ];
 }

@@ -82,7 +82,7 @@
 </div>
 <br><br>
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-7">
         <div class="row">
             <div class="col-6">
                 <h6>Discounts</h6>
@@ -95,11 +95,14 @@
             
             <form id="create_discount_form" onsubmit="event.preventDefault(); create_discount()">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <input type="text" required class="form-control" name="code" placeholder="CODE">
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <input type="text" required class="form-control" name="min_purchase" placeholder="Min purchase">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="text" style="padding: 5px" required class="form-control" name="pct" placeholder="%">
                     </div>
                     <div class="col-md-2">
                         <input type="text" style="padding: 5px" required class="form-control" name="days" placeholder="Days">
@@ -116,7 +119,7 @@
         </div>
         <br>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-5">
         <div class="row">
             <div class="col-6">
                 <h6>Delivery Location</h6>

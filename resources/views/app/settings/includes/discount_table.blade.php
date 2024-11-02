@@ -3,6 +3,7 @@
         <tr>
             <th>No</th>
             <th>Code</th>
+            <th>Pct (%)</th>
             <th>Minimum Purchase</th>
             <th>Expiry Date</th>
             <th>Delete</th>
@@ -14,6 +15,7 @@
             <tr>
                 <td>{{$no++}}</td>
                 <td>{{$discount->code}}</td>
+                <td>{{$discount->pct}}%</td>
                 <td>{{format_with_cur($discount->min_purchase)}}</td>
                 <td>{{$discount->expiry_date->isoFormat('lll')}}</td>
                 <td>

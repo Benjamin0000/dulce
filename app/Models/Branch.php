@@ -51,5 +51,15 @@ class Branch extends Model
 
     }
 
+    public function get_valid_discounts()
+    {
+        return Discount::where('branch_id', $this->id)->where('expiry_date', '>', now())->get()->all(); 
+    }
+
+    public function get_delivery_locations()
+    {
+        return Location::where('branch_id', $this->id)->get()->all(); 
+    }
+
     
 }

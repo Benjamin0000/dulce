@@ -12,8 +12,8 @@ Route::get('/get-category/{branch_id?}', [ApiController::class, 'get_branches'])
 Route::get('/get-items/{id}', [ApiController::class, 'get_more_items']);
 Route::get('/get-item/{id}', [ApiController::class, 'get_item']); 
 
-
-
+Route::get('/get-discounts/{id}', [ApiController::class, 'get_discounts_and_locations']);
+Route::post('/validate-location/{id}', [ApiController::class, 'validate_location']); 
 
 
 Route::post('/process-order', [ApiController::class, 'process_order']); 

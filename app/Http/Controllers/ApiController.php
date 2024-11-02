@@ -84,8 +84,19 @@ class ApiController extends Controller
 
     public function get_delivery_cost(Request $request)
     {
-
+        
     }
+
+    public function get_discounts_and_locations($branch_id)
+    {
+        $branch = Branch::find($branch_id); 
+        if(!$branch) return []; 
+        return [
+            'discounts'=>$branch->get_valid_discounts(),
+            'locations'=>$branch->get_delivery_locations(),
+        ]; 
+    }
+
 
     public function validate_discount_code(Request $request)
     {
