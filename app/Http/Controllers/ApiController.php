@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Branch;  
 use Illuminate\Support\Facades\Storage; 
+use Illuminate\Support\Facades\Auth; 
 use App\Models\Item; 
 use App\Models\Addon; 
 use App\Models\Discount; 
@@ -122,8 +123,18 @@ class ApiController extends Controller
     }
 
 
-    public function process_order(Request $request)
+    public function process_order(Request $request, string $branch_id)
     {
-        
+
+        return $request->all(); 
+
+        $user = Auth::user(); 
+
+
+        if ($user) {
+          
+        } else {
+           
+        }
     }
 }
