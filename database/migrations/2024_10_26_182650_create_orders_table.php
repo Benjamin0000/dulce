@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->nullable();
-            $table->string('guest_id')->nullable(); 
-           
             $table->bigInteger('branch_id');
             $table->string('branch_name');
             $table->string('orderID')->indexed(); //unique id for orders. 
