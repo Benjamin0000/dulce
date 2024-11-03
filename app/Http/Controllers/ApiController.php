@@ -10,6 +10,8 @@ use App\Models\Item;
 use App\Models\Addon; 
 use App\Models\Discount; 
 use App\Models\Location; 
+use App\Models\Cart; 
+use App\Models\Order; 
 
 class ApiController extends Controller
 {
@@ -125,16 +127,109 @@ class ApiController extends Controller
 
     public function process_order(Request $request, string $branch_id)
     {
+        $branch = Branch::find($branch_id); 
+        if(!$branch)
+            return ['error'=>"Branch not found"]; 
 
-        return $request->all(); 
+        $request->validate([
+            'fullname' => 'required|string|max:255',
+            'mobile_number' => 'required|string|max:15',
+            'email' => 'required|email|max:255',
+            'is_pickup' => 'required|in:yes,no',
+            'address' => 'nullable|string|max:500',
+            'pined_location' => 'nullable|string|max:50',
+            'selected_location' => 'required|string|exists:locations,id', // Assuming you have a locations table
+            'pickup_time' => 'nullable|date',
+            'pickup_date' => 'nullable|date',
+            'discount_code' => 'nullable|string|max:50',
+            'note' => 'nullable|string|max:1000',
+        ]);
 
-        $user = Auth::user(); 
+        $discount_code = $request->discount_code;
+        $items = $request->items; 
+        $discount_pct = 0; 
+        $delivery_cost = 0; 
+        $region = ""; 
+        $vat = $branch->vat; 
+        $total = 0; 
+        $total_cost = 0; 
+        $signdIn = Auth::user(); 
 
+        $is_pickup = $request->is_pickup === 'yes'; 
 
-        if ($user) {
-          
-        } else {
-           
+        if($discount_code){
+            if($discount = get_discount_code($discount_code, $branch_id)){
+                $discount_pct = $discount->pct;
+            }
         }
+
+        if(!$is_pickup){
+            $Location = Location::find($request->selected_location);
+            $delivery_cost = $Location->cost;
+            $region = $Location->region;
+        }
+         
+        $total_cost = $total = sum_total($items);
+
+        if($discount_pct) //apply discount 
+            $total_cost -= ( $discount_pct/100 ) * $total_cost; 
+
+        $vat_cost = $vat ? ($vat/100) * $total_cost : 0; //set vat 
+
+        $total_cost += $vat_cost; 
+
+        if($delivery_cost) //set delivery cost 
+            $total_cost += $delivery_cost; 
+
+        $token = null;
+        // Create a new Order
+        $order = new Order();
+
+        $user = $signdIn;
+        if(!$user){
+            $user = User::create([ 'name'=>$request->fullname ]);
+            $token = $user->createToken('mobile-app-token')->plainTextToken;
+        }
+
+        $order->user_id = $user->id;
+        $order->branch_id = $branch->id; 
+        $order->branch_name = $branch->name; 
+        $order->orderID = generateOrderId(); 
+        $order->fullname = $request->fullname;
+        $order->mobile_number = $request->mobile_number;
+        $order->email = $request->email;
+        $order->address = $request->address;
+        $order->location = $request->pined_location;
+        $order->is_pickup = $is_pickup;
+        $order->location_name = $region;
+        $order->delivery_fee = $delivery_cost;
+
+        $order->pickup_time = $request->pickup_time;
+        $order->pickup_date = $request->pickup_date;
+        $order->discount_code = $discount_code;
+        $order->discount = $discount_pct; 
+
+        $order->total = $total;
+        $order->total_cost = $total_cost; 
+        $order->vat = $vat; 
+        $order->online = 1; 
+        $order->note = $request->note;
+        $order->save();
+    
+        // Save order items
+        foreach($items as $item) {
+            $orderItem = new Cart();
+            $orderItem->order_id = $order->id;
+            $orderItem->item_id = $item['id'];
+            $orderItem->item_name = $item['name'];
+            $orderItem->price = $item['price']; 
+            $orderItem->qty = $item['qty'];
+            $orderItem->save();
+        }
+
+        return [
+            'token'=>$token,
+            'url'=>route('payment_processor', $order->orderID)
+        ]; 
     }
 }

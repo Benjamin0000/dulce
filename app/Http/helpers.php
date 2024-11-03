@@ -2,6 +2,8 @@
 use App\Models\Item; 
 use App\Models\Branch; 
 use App\Models\Addon; 
+use App\Models\Order; 
+use App\Models\Discount; 
 
 CONST CATEGORY = 0; 
 CONST ITEM = 1; 
@@ -85,5 +87,28 @@ function delete_addons($type, $id)
     }
     foreach($addons as $addon){
         $addon->delete(); 
+    }
+}
+
+function generateOrderId() {
+    return 'ORD-'. uniqid();
+}
+
+function get_discount_code($code, $branch_id)
+{
+    return Discount::where([
+        ['code', $code], 
+        ['branch_id', $branch_id], 
+        ['expiry_date', '>', now()]
+    ])->first(); 
+}
+
+
+function sum_total($items)
+{
+    $total = 0; 
+    foreach($items as $item){
+        if($product = Item::find($item['id']))
+            $total += $product->selling_price * $product->qty; 
     }
 }

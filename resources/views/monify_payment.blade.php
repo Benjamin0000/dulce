@@ -4,7 +4,7 @@
     <script>
         function payWithMonnify() {
             MonnifySDK.initialize({
-                amount:'{{$order['total']}}' ,
+                amount:'{{$order['total_cost']}}' ,
                 currency: "NGN",
                 reference: new String((new Date()).getTime()),
                 customerFullName: '{{$order['fullname']}}',

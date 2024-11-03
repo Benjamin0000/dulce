@@ -57,4 +57,9 @@ class FrontController extends Controller implements HasMiddleware
         $order = Order::where('orderID', $order_id)->first(); 
         return view('monify_payment', compact('order')); 
     }
+
+    public function confirm_payment()
+    {
+        
+    }
 }

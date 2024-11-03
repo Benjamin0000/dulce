@@ -12,8 +12,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/payment/{order_id}', [FrontController::class, 'payment']); 
-
+Route::get('/payment-complete/{order_id}', [FrontController::class, 'payment'])->name('payment_processor'); 
 
 
 Route::get('/login', [FrontController::class, 'login_page'])->name('login'); 
