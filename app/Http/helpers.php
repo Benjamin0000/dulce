@@ -111,4 +111,5 @@ function sum_total($items)
         if($product = Item::find($item['id']))
             $total += $product->selling_price * $product->qty; 
     }
+    return $total; 
 }
