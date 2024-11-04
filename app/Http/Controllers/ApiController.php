@@ -12,6 +12,7 @@ use App\Models\Discount;
 use App\Models\Location; 
 use App\Models\Cart; 
 use App\Models\Order; 
+use App\Models\User; 
 
 class ApiController extends Controller
 {
