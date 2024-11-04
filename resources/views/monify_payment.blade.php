@@ -1,6 +1,9 @@
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="text/javascript" src="https://sdk.monnify.com/plugin/monnify.js"></script>
+    <title>Payment</title>
     <script>
         function payWithMonnify() {
             MonnifySDK.initialize({
