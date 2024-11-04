@@ -138,7 +138,7 @@ class ApiController extends Controller
             'is_pickup' => 'required|in:yes,no',
             'address' => 'nullable|string|max:500',
             'pined_location' => 'nullable|string|max:50',
-            'selected_location' => 'required|string|exists:locations,id', // Assuming you have a locations table
+            'selected_location' => 'required|exists:locations,id', // Assuming you have a locations table
             'pickup_time' => 'nullable|date',
             'pickup_date' => 'nullable|date',
             'discount_code' => 'nullable|string|max:50',
