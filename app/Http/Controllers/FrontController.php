@@ -70,7 +70,7 @@ class FrontController extends Controller implements HasMiddleware
 
     public function process_payment($order_id)
     {
-        $find = Order::where('id', $order_id)->first(); 
+        $find = Order::find($order_id);
         if($find){
             $find->paid = 1; 
             $find->save(); 
