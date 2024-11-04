@@ -15,6 +15,11 @@ Route::get('/', function () {
 Route::get('/payment-complete/{order_id}', [FrontController::class, 'payment'])->name('payment_processor'); 
 
 
+Route::get('/payment-completed', [FrontController::class, 'payment_success'])->name('payment_successful'); 
+Route::get('/payment-canceled',  [FrontController::class, 'payment_canceled'])->name('payment_canceled'); 
+Route::get('/process-payment', [FrontController::class, 'process_payment'])->name('process_payment'); 
+
+
 Route::get('/login', [FrontController::class, 'login_page'])->name('login'); 
 Route::post('/login', [FrontController::class, 'login'])->name('login'); 
 

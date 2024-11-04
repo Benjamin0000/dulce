@@ -55,11 +55,25 @@ class FrontController extends Controller implements HasMiddleware
     public function payment($order_id)
     {
         $order = Order::where('orderID', $order_id)->first(); 
-        return view('monify_payment', compact('order')); 
+        return view('monify.payment', compact('order')); 
     }
 
-    public function confirm_payment()
+    public function payment_success()
     {
-        
+        return view('monify.success'); 
+    }
+
+    public function payment_canceled()
+    {
+        return view('monify.canceled'); 
+    }
+
+    public function process_payment($order_id)
+    {
+        $find = Order::where('id', $id)->first(); 
+        if($find){
+            $find->paid = 1; 
+            $find->save(); 
+        }
     }
 }

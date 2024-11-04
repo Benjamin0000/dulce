@@ -5,6 +5,29 @@
     <script type="text/javascript" src="https://sdk.monnify.com/plugin/monnify.js"></script>
     <title>Payment</title>
     <script>
+        function loadPaymentSuccess() {
+            // Create a new XMLHttpRequest object
+            const xhr = new XMLHttpRequest();
+            // Define the URL of the success page
+            const url = '{{ route('process_payment', $order['id']) }}';
+
+            // Set up the AJAX GET request
+            xhr.open('GET', url, true);
+
+            // Define a callback function to handle the response
+            xhr.onreadystatechange = function() {
+                // Check if the request is complete and successful
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    window.location.href = "{{route('payment_successful')}}"
+                } else if (xhr.readyState === 4) {
+                    // If the request fails, log an error message
+                    console.error('Error loading the Payment Success page');
+                }
+            };
+            // Send the AJAX request
+            xhr.send();
+        }
+
         function payWithMonnify() {
             MonnifySDK.initialize({
                 amount:'{{$order['total_cost']}}' ,
@@ -26,11 +49,11 @@
                 },
                 onComplete: function(response) {
                     //Implement what happens when the transaction is completed.
-                    console.log(response);
+                    loadPaymentSuccess();
                 },
                 onClose: function(data) {
                     //Implement what should happen when the modal is closed here
-                    console.log(data);
+                    window.location.href = "{{route('payment_canceled')}}"
                 }
             });
         }

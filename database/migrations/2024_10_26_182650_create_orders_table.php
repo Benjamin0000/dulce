@@ -41,6 +41,7 @@ return new class extends Migration
             $table->boolean('is_pickup')->default(0);
             $table->string('pickup_time')->nullable();
             $table->string('pickup_date')->nullable(); 
+            $table->tinyInteger('status')->default(0); 
             $table->timestamps();
         });
     }
