@@ -16,4 +16,4 @@ Route::get('/get-discounts/{branch_id}', [ApiController::class, 'get_discounts_a
 Route::post('/validate-location/{branch_id}', [ApiController::class, 'validate_location']); 
 
 
-Route::middleware('auth:sanctum')->post('/process-order/{branch_id}', [ApiController::class, 'process_order']); 
+Route::post('/process-order/{branch_id}', [ApiController::class, 'process_order']); 

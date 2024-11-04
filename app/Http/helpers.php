@@ -1,4 +1,6 @@
 <?php 
+use Laravel\Sanctum\PersonalAccessToken;
+use Illuminate\Support\Facades\Auth; 
 use App\Models\Item; 
 use App\Models\Branch; 
 use App\Models\Addon; 
@@ -112,4 +114,17 @@ function sum_total($items)
             $total += $product->selling_price * $item['qty']; 
     }
     return $total; 
+}
+
+function sign_user_in()
+{
+    $token = request()->bearerToken();
+    if ($token) {
+        // Find the token in the database and authenticate the user manually
+        $accessToken = PersonalAccessToken::findToken($token);
+        if ($accessToken) {
+            // Manually set the authenticated user
+            Auth::login($accessToken->tokenable);
+        }
+    }
 }
