@@ -146,6 +146,11 @@ class ApiController extends Controller
             'note' => 'nullable|string|max:1000',
         ]);
 
+        return [
+            'header'=>$request->header('Authorization'),
+            'auth'=>Auth::check()
+        ]; 
+
         $discount_code = $request->discount_code;
         $items = $request->items; 
         $discount_pct = 0; 
