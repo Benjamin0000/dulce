@@ -5,6 +5,7 @@
     <script type="text/javascript" src="https://sdk.monnify.com/plugin/monnify.js"></script>
     <title>Payment</title>
     <script>
+        window.payment_success = false; 
         function loadPaymentSuccess() {
             // Create a new XMLHttpRequest object
             const xhr = new XMLHttpRequest();
@@ -18,8 +19,11 @@
             xhr.onreadystatechange = function() {
                 // Check if the request is complete and successful
                 if (xhr.readyState === 4 && xhr.status === 200) {
+                    window.payment_success = true;  
                     window.location.href = "{{route('payment_successful')}}"
+
                 } else if (xhr.readyState === 4) {
+
                     // If the request fails, log an error message
                     console.error('Error loading the Payment Success page');
                 }
@@ -52,8 +56,12 @@
                     loadPaymentSuccess();
                 },
                 onClose: function(data) {
+                    if(!window.payment_success){
+                        window.location.href = "{{route('payment_canceled')}}"
+                    }else{
+                        window.location.href = "{{route('payment_successful')}}"
+                    }
                     //Implement what should happen when the modal is closed here
-                    window.location.href = "{{route('payment_canceled')}}"
                 }
             });
         }
