@@ -109,7 +109,7 @@ function sum_total($items)
     $total = 0; 
     foreach($items as $item){
         if($product = Item::find($item['id']))
-            $total += $product->selling_price * $product->qty; 
+            $total += $product->selling_price * $item['qty']; 
     }
     return $total; 
 }
