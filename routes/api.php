@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController; 
+use App\Http\Controllers\WebhookController;
+
+Route::post('/webhook-xxccc-ddd', [WebhookController::class, 'handleWebhook']);
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -17,3 +20,4 @@ Route::post('/validate-location/{branch_id}', [ApiController::class, 'validate_l
 
 
 Route::post('/process-order/{branch_id}', [ApiController::class, 'process_order']); 
+
