@@ -86,11 +86,6 @@ class ApiController extends Controller
         return ['item'=>'']; 
     }
 
-    public function get_delivery_cost(Request $request)
-    {
-        
-    }
-
     public function get_discounts_and_locations($branch_id)
     {
         $branch = Branch::find($branch_id); 
@@ -231,6 +226,26 @@ class ApiController extends Controller
         return [
             'token'=>$token,
             'url'=>route('payment_processor', $order->orderID)
+        ]; 
+    }
+
+    public function get_order_history($branch_id)
+    {
+        sign_user_in(); 
+        $user = Auth::user(); 
+        if(!$user) return ['orders'=>[]];
+
+        $orders = Order::where('user_id', $user->id)->latest()->paginate(10);
+        return [
+            'orders'=>$orders->all()   
+        ]; 
+    }
+
+    public function get_cart_items($order_id)
+    {   
+        $items = Cart::where('order_id', $order_id)->paginate(10); 
+        return [
+            'items'=>$items->all()
         ]; 
     }
 }
