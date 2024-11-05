@@ -8,8 +8,6 @@ use App\Http\Controllers\FrontController;
 use App\Http\Controllers\StockController; 
 use App\Http\Controllers\SettingsController; 
 
-Route::post('/webhook-xxccc-ddd', [WebhookController::class, 'handleWebhook']);
-
 
 
 Route::get('/', function () {

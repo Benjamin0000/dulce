@@ -7,5 +7,6 @@
     </head>
     <body class="font-sans antialiased dark:bg-black dark:text-white/50">
         <h2>Home of something huge, stay tuned</h2>
+        <h2>We would help Businesses go far</h2>
     </body>
 </html>
