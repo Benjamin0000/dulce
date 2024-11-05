@@ -20,5 +20,5 @@ Route::post('/validate-location/{branch_id}', [ApiController::class, 'validate_l
 Route::post('/process-order/{branch_id}', [ApiController::class, 'process_order']); 
 
 
-Route::get('/get-orders/{branch_id}', [ApiController::class, 'get_order_history']);
+Route::get('/get-orders', [ApiController::class, 'get_order_history']);
 Route::get('/history/cart/{order_id}', [ApiController::class, 'get_cart_items']); 

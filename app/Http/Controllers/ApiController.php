@@ -229,7 +229,7 @@ class ApiController extends Controller
         ]; 
     }
 
-    public function get_order_history($branch_id)
+    public function get_order_history()
     {
         sign_user_in(); 
         $user = Auth::user(); 
