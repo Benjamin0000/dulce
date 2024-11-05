@@ -30,7 +30,8 @@ return new class extends Migration
             $table->decimal('total', 65, 2);
             $table->decimal('total_cost', 65, 2); //payable cost
             $table->decimal('vat', 65, 2)->default(0);
-            
+            // $table->decimal('vat_cost', 65, 2)->default(0);
+
             $table->string('discount')->nullable();
             $table->string('discount_code')->nullable();
             $table->decimal('delivery_fee')->nullable();  

@@ -208,6 +208,7 @@ class ApiController extends Controller
         $order->total = $total;
         $order->total_cost = $total_cost; 
         $order->vat = $vat; 
+        // $order->vat_cost = $vat_cost; 
         $order->online = 1; 
         $order->note = $request->note;
         $order->save();
