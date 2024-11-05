@@ -235,7 +235,7 @@ class ApiController extends Controller
         $user = Auth::user(); 
         if(!$user) return ['orders'=>[]];
 
-        $orders = Order::where('user_id', $user->id)->latest()->paginate(10);
+        $orders = Order::where([ ['user_id', $user->id], ['paid', 1] ])->latest()->paginate(10);
         return [
             'orders'=>$orders->all()   
         ]; 
