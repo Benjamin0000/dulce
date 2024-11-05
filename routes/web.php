@@ -1,11 +1,15 @@
 <?php
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WebhookController;
 use App\Http\Controllers\DashboardController; 
 use App\Http\Controllers\BranchController; 
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\FrontController; 
 use App\Http\Controllers\StockController; 
 use App\Http\Controllers\SettingsController; 
+
+Route::post('/webhook-xxccc-ddd', [WebhookController::class, 'handleWebhook']);
+
 
 
 Route::get('/', function () {
