@@ -9,6 +9,8 @@ class Cart extends Model
 {
     use HasFactory;
 
+    protected $appends = ['logo'];
+
     protected $fillable = [ 
         'order_id',
         'item_id',
@@ -16,4 +18,12 @@ class Cart extends Model
         'price', 
         'qty'
     ]; 
+
+    public function getLogoAttribute()
+    {
+        $item = Item::find($this->item_id);
+        if($item)
+            return asset($item->logo); // Customize as needed
+        return ""; 
+    }
 }
