@@ -52,11 +52,13 @@
                     console.log("SDK is UP");
                 },
                 onComplete: function(response) { 
+                    console.log('from success method')
                     //Implement what happens when the transaction is completed.
                     loadPaymentSuccess();
                     console.log(response)
                 },
                 onClose: function(data) {
+                    console.log('from the close method')
                     console.log(data); 
 
                     // if(data.paymentStatus == "USER_CANCELLED"){
