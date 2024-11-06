@@ -151,6 +151,16 @@ class ApiController extends Controller
         $total_cost = 0; 
         $signdIn = Auth::user(); 
 
+
+        foreach ($items as $item) {
+            $itemName = $item['name'];
+            $existingItem = Item::find($item['id']);
+        
+            if (!$existingItem || $existingItem->type !== ITEM) {
+                return ['error' => "$itemName does not exist"];
+            }
+        }
+
         $is_pickup = $request->is_pickup === 'yes'; 
 
         if($discount_code){
