@@ -57,11 +57,11 @@
                 },
                 onClose: function(data) {
                     console.log(data); 
-                    if(window.payment_success === false){
-                        window.location.href = "{{route('payment_canceled')}}"
-                    }else{
-                        window.location.href = "{{route('payment_successful')}}"
-                    }
+                    // if(window.payment_success === false){
+                    //     window.location.href = "{{route('payment_canceled')}}"
+                    // }else{
+                    //     window.location.href = "{{route('payment_successful')}}"
+                    // }
                     //Implement what should happen when the modal is closed here
                 }
             });
