@@ -5,7 +5,7 @@
     <script type="text/javascript" src="https://sdk.monnify.com/plugin/monnify.js"></script>
     <title>Payment</title>
     <script>
-        window.payment_success = ""; 
+       
         function loadPaymentSuccess() {
             // Create a new XMLHttpRequest object
             const xhr = new XMLHttpRequest();
@@ -32,6 +32,16 @@
             xhr.send();
         }
 
+        function handle_request(data){
+            if(data.paymentStatus == "USER_CANCELLED"){
+                window.location.href = "{{route('payment_canceled')}}"
+            }else if(data.status == 'SUCCESS'){
+                window.location.href = "{{route('payment_successful')}}"
+            }else{
+                window.location.href = "{{route('payment_canceled')}}"
+            }
+        }
+
         function payWithMonnify() {
             MonnifySDK.initialize({
                 amount:'{{$order['total_cost']}}' ,
@@ -52,23 +62,15 @@
                     console.log("SDK is UP");
                 },
                 onComplete: function(response) { 
-                    console.log('from success method')
                     //Implement what happens when the transaction is completed.
                     loadPaymentSuccess();
-                    console.log(response)
+                    handle_request(response)
                 },
                 onClose: function(data) {
                     console.log('from the close method')
                     console.log(data); 
 
-                    // if(data.paymentStatus == "USER_CANCELLED"){
-                    //      window.location.href = "{{route('payment_canceled')}}"
-                    // }
-                    // if(window.payment_success === false){
-                    //     window.location.href = "{{route('payment_canceled')}}"
-                    // }else{
-                    //     window.location.href = "{{route('payment_successful')}}"
-                    // }
+                    handle_request(data)
                     //Implement what should happen when the modal is closed here
                 }
             });
