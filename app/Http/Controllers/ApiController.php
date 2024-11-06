@@ -157,7 +157,7 @@ class ApiController extends Controller
             $existingItem = Item::find($item['id']);
         
             if (!$existingItem || $existingItem->type !== ITEM) {
-                return ['error' => "$itemName does not exist"];
+                return ['error' => "$itemName does not exist please remove it from your cart"];
             }
         }
 
