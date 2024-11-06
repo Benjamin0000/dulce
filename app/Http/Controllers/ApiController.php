@@ -83,7 +83,7 @@ class ApiController extends Controller
                 'item'=>$item
             ];
         }
-        return ['item'=>'']; 
+        return ['item'=>[]]; 
     }
 
     public function get_discounts_and_locations($branch_id)
