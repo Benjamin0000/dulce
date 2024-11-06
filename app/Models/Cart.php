@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage; 
 
 class Cart extends Model
 {
@@ -23,7 +24,7 @@ class Cart extends Model
     {
         $item = Item::find($this->item_id);
         if($item)
-            return asset($item->logo); // Customize as needed
+            return Storage::url($item->logo); // Customize as needed
         return ""; 
     }
 }
