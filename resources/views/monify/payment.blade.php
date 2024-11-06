@@ -20,7 +20,7 @@
                 // Check if the request is complete and successful
                 if (xhr.readyState === 4 && xhr.status === 200) { 
                     window.payment_success = true;
-                    window.location.href = "{{route('payment_successful')}}"
+                    // window.location.href = "{{route('payment_successful')}}"
 
                 } else if (xhr.readyState === 4) {
                     window.payment_success = false;
@@ -54,9 +54,14 @@
                 onComplete: function(response) { 
                     //Implement what happens when the transaction is completed.
                     loadPaymentSuccess();
+                    console.log(response)
                 },
                 onClose: function(data) {
                     console.log(data); 
+
+                    // if(data.paymentStatus == "USER_CANCELLED"){
+                    //      window.location.href = "{{route('payment_canceled')}}"
+                    // }
                     // if(window.payment_success === false){
                     //     window.location.href = "{{route('payment_canceled')}}"
                     // }else{
