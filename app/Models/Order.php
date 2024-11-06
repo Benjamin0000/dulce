@@ -18,8 +18,9 @@ class Order extends Model
         if($discount = $this->discount){
             $total -= ($discount/100) * $total; 
         }
-        
-        return $vat ? ($vat/100) * $total : 0; //set vat 
+
+        $vat_cost = $vat ? ($vat/100) * $total : 0; //set vat 
+        return $vat_cost; 
     }
     
 }
