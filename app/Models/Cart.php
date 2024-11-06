@@ -24,7 +24,7 @@ class Cart extends Model
     {
         $item = Item::find($this->item_id);
         if($item)
-            return Storage::url($item->logo); // Customize as needed
+            return asset(Storage::url($item->logo)); // Customize as needed
         return ""; 
     }
 }
