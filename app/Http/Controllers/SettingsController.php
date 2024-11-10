@@ -68,6 +68,15 @@ class SettingsController extends Controller implements HasMiddleware
         return ['success'=>'Vat has been set']; 
     }
 
+    public function set_service_fee(string $branch_id, Request $request)
+    {
+        $fee = $request->input('service_fee');
+        $branch = Branch::findOrFail($branch_id);
+        $branch->service_fee = $fee;
+        $branch->save(); 
+        return ['success'=>'Service fee has been set']; 
+    }
+
     public function create_discount(string $branch_id, Request $request)
     {
         Branch::findOrFail($branch_id);

@@ -6,83 +6,40 @@
             <h4 class="title"><i class="fa-solid fa-gears"></i> Settings</h4>
         </div>
         <div class="col-md-6">
+            <h4><i class="fa-solid fa-home"></i> {{$branch->name}}</h4>
         </div>
     </div>
 </div>
 
-<h5>Branch: {{$branch->name}}</h5>
-<br>
 <div class="row">
-    <div class="col-md-2">
-        <form id="set_vat_form" onsubmit="event.preventDefault(); submit_vat()">
-            <div class="form-group">
-                <label for="">Set VAT (%)</label>
-                <input type="number" name="vat" step="any" value="{{$branch->vat}}" class="form-control">
-            </div>
-            <div class="form-group">
-                <button class="btn btn-primary btn-sm btn-block">SET</button>
-            </div>
-        </form>
-    </div>
-    <div class="col-md-5">
-        <h6>Branch Exact Location</h6>
-        <div>
-            Status:
-            @if($branch->isLocationNotSet()) 
-                <span class="text-danger">Not Set <i class="fa-regular fa-circle-xmark"></i></span> 
-            @else 
-                <span class="text-success">Set <i class="fa-solid fa-check"></i> </span> 
-            @endif 
-        </div>
-        <div>
-            Please make sure you're at the exact location of this branch.
-        </div>
-        <div class="row" style="margin-top:6px">
+    <div class="col-md-6">
+        <h5>Charge Settings</h5>
+        <br>
+        <div class="row">
             <div class="col-md-6">
-                <div class="form-group">
-                    <button id="location_btn" onclick="getUserLocation()" class="btn btn-primary btn-sm btn-block">Set Branch location</button>
-                </div> 
-            </div>
-            @if(!$branch->isLocationNotSet()) 
-                @php 
-                    $location = $branch->getCoordinates(); 
-                    $latitude = $location['latitude']; 
-                    $longitude = $location['longitude']; 
-                @endphp 
-                <div class="col-md-6">
+                <form id="set_vat_form" onsubmit="event.preventDefault(); submit_vat()">
                     <div class="form-group">
-                        <a href="https://www.google.com/maps/{{'@'.$latitude}},{{$longitude}},15z" target="_blank" class="btn btn-primary btn-sm btn-block">View on map</a>
-                    </div> 
-                </div> 
-            @endif 
-        </div>
-    </div>
-    <div class="col-md-5">
-        <form id="set_delivery_cost_form" onsubmit="event.preventDefault(); set_delivery_data()">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label for="">MAX kilometres</label>
-                        <input type="number" name="max_km" required step="any" value="{{$branch->max_km}}" class="form-control">
+                        <label for="">Set VAT (%)</label>
+                        <input type="number" name="vat" step="any" value="{{$branch->vat}}" class="form-control">
                     </div>
-                </div>
-                <div class="col-md-6">
                     <div class="form-group">
-                        <label for="">Cost Per kilometre (₦)</label>
-                        <input type="number" name="cost" required step="any" value="{{$branch->cost_per_km}}" class="form-control">
+                        <button class="btn btn-primary btn-sm btn-block">SET</button>
                     </div>
-                </div>
+                </form>
             </div>
-            
-            <div class="form-group" style="margin-top:12px">
-                <button class="btn btn-primary btn-sm btn-block">SET Delivery info</button>
+            <div class="col-md-6">
+                <form id="set_service_fee_form" onsubmit="event.preventDefault(); submit_service_fee()">
+                    <div class="form-group">
+                        <label for="">Service Charge (₦)</label>
+                        <input type="number" name="service_fee" step="any" value="{{$branch->service_fee}}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-sm btn-block">SET</button>
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
-</div>
-<br><br>
-<div class="row">
-    <div class="col-md-7">
+        </div>       
+        <br>
         <div class="row">
             <div class="col-6">
                 <h6>Discounts</h6>
@@ -119,10 +76,68 @@
         </div>
         <br>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-6">
+        <h5>Delivery Settings</h5>
+        <br>
+        <h6>Set Branch Exact Location</h6>
+        <div>
+            Status:
+            @if($branch->isLocationNotSet()) 
+                <span class="text-danger">Not Set <i class="fa-regular fa-circle-xmark"></i></span> 
+            @else 
+                <span class="text-success">Set <i class="fa-solid fa-check"></i> </span> 
+            @endif 
+        </div>
+        <div>
+            Please make sure you're at the exact location of this branch.
+        </div>
+        <div class="row" style="margin-top:6px">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <button id="location_btn" onclick="getUserLocation()" class="btn btn-primary btn-sm btn-block">Set Branch location</button>
+                </div> 
+            </div>
+            @if(!$branch->isLocationNotSet()) 
+                @php 
+                    $location = $branch->getCoordinates(); 
+                    $latitude = $location['latitude']; 
+                    $longitude = $location['longitude']; 
+                @endphp 
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <a href="https://www.google.com/maps/{{'@'.$latitude}},{{$longitude}},15z" target="_blank" class="btn btn-primary btn-sm btn-block">View on map</a>
+                    </div> 
+                </div> 
+            @endif 
+        </div>
+        <br>
+
+        <form id="set_delivery_cost_form" onsubmit="event.preventDefault(); set_delivery_data()">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="">MAX kilometres</label>
+                        <input type="number" name="max_km" required step="any" value="{{$branch->max_km}}" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="">Cost Per kilometre (₦)</label>
+                        <input type="number" name="cost" required step="any" value="{{$branch->cost_per_km}}" class="form-control">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group" style="margin-top:12px">
+                <button class="btn btn-primary btn-sm btn-block">SET Delivery info</button>
+            </div>
+        </form>
+        <br>
+
+        <br>
         <div class="row">
             <div class="col-6">
-                <h6>Delivery Location</h6>
+                <h6>Delivery Locations</h6>
             </div>
             <div class="col-6 text-end">
                 <button onclick="toggle_location_form_con()" style="margin-top: -10px" class="badge bg-primary">Create Location &nbsp;<i style="margin-top: 2px" class="fa-solid fa-caret-down"></i> </button>
@@ -143,7 +158,6 @@
                 </div>
             </form>
         </div>
-
         <div id="location_table_con">
            @include('app.settings.includes.location_table')
         </div>
@@ -173,6 +187,10 @@ function create_discount(){
 }
 function submit_vat(){
     submit_forms("#set_vat_form", '{{route('admin.set_vat', $branch->id)}}', false)
+}
+
+function submit_service_fee(){
+    submit_forms("#set_service_fee_form", '{{route('admin.set_service_fee', $branch->id)}}', false)
 }
 
 

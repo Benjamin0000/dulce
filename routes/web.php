@@ -8,15 +8,11 @@ use App\Http\Controllers\FrontController;
 use App\Http\Controllers\StockController; 
 use App\Http\Controllers\SettingsController; 
 
-
-
 Route::get('/', function () {
     return view('welcome');
 });
 
 Route::get('/payment-complete/{order_id}', [FrontController::class, 'payment'])->name('payment_processor'); 
-
-
 Route::get('/payment-completed', [FrontController::class, 'payment_success'])->name('payment_successful'); 
 Route::get('/payment-canceled',  [FrontController::class, 'payment_canceled'])->name('payment_canceled'); 
 Route::get('/process-payment/{id}', [FrontController::class, 'process_payment'])->name('process_payment'); 
@@ -57,6 +53,7 @@ Route::post('/update-stocks', [StockController::class, 'update_stock'])->name('a
 Route::get('/settings/{branch_id}', [SettingsController::class, 'index'])->name('admin.settings.index'); 
 Route::post('/settings/{branch_id}/set-location', [SettingsController::class, 'set_location'])->name('admin.set_branch_location');
 Route::post('/settings/{branch_id}/set-vat', [SettingsController::class, 'set_vat'])->name('admin.set_vat'); 
+Route::post('/settings/{branch_id}/set-service-fee', [SettingsController::class, 'set_service_fee'])->name('admin.set_service_fee'); 
 #discount code
 Route::post('/settings/create-discount/{branch_id}', [SettingsController::class, 'create_discount'])->name('admin.create_discount'); 
 Route::delete('/settings/delete-discount/{id}', [SettingsController::class, 'delete_discount'])->name('admin.delete_discount'); 
