@@ -29,27 +29,32 @@
     }
 </style>
 <div class="nk-block-head nk-block-head-sm">
-    <div class="row">
-        <div class="col-6"><h4 class="title">Branches</h4></div>
-        <div class="col-6 text-end"><a data-bs-target="#create_branch" data-bs-toggle="modal" href="#" id="create_btn" class="btn btn-primary">Create Branch</a></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6"><h4 class="title">Branches</h4></div>
+            <div class="col-6 text-end"><a data-bs-target="#create_branch" data-bs-toggle="modal" href="#" id="create_btn" class="btn btn-primary">Create Branch</a></div>
+        </div>
     </div>
 </div>
-<div class="row">
-    @foreach($branches as $branch)
-        <div class="col-md-4">
-            <a href="{{route('admin.branch.show', $branch->id)}}" class="branch_link">
-                <div class="branch_con">
-                    <div class="branch_img_con"><img src="{{Storage::url($branch->poster)}}" alt=""></div>
-                    <div class="branch_details_con">
-                        <h6>{{$branch->name}}</h6>
-                        <div><i class="fa-solid fa-landmark text-primary"></i> {{$branch->state}} <i class="fa-solid fa-arrow-right"></i> {{$branch->city}}</div>
-                        <div><i class="fa-solid fa-location-dot text-danger"></i> {{$branch->address}}</div>
+
+<div class="container-fluid">
+    <div class="row">
+        @foreach($branches as $branch)
+            <div class="col-md-4 col-sm-6" style="margin-bottom: 10px">
+                <a href="{{route('admin.branch.show', $branch->id)}}" class="branch_link">
+                    <div class="branch_con">
+                        <div class="branch_img_con"><img src="{{Storage::url($branch->poster)}}" alt=""></div>
+                        <div class="branch_details_con">
+                            <h6>{{$branch->name}}</h6>
+                            <div><i class="fa-solid fa-landmark text-primary"></i> {{$branch->state}} <i class="fa-solid fa-arrow-right"></i> {{$branch->city}}</div>
+                            <div><i class="fa-solid fa-location-dot text-danger"></i> {{$branch->address}}</div>
+                        </div>
                     </div>
-                </div>
-            </a>
-        </div>
-    @endforeach 
-</div>
+                </a>
+            </div>
+        @endforeach 
+    </div>
+</div> 
 {{$branches->links()}}
 @include('app.branches.create_modal')
 @stop 

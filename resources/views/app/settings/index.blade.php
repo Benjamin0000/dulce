@@ -6,7 +6,8 @@
             <h4 class="title"><i class="fa-solid fa-gears"></i> Settings</h4>
         </div>
         <div class="col-md-6">
-            <h4><i class="fa-solid fa-home"></i> {{$branch->name}}</h4>
+            <div class="d-block d-md-none d-lg-none"><br></div>
+            {{-- <h4><i class="fa-solid fa-home"></i> {{$branch->name}}</h4> --}}
         </div>
     </div>
 </div>
@@ -28,6 +29,7 @@
                 </form>
             </div>
             <div class="col-md-6">
+                <div class="d-block d-md-none d-lg-none"><br></div>
                 <form id="set_service_fee_form" onsubmit="event.preventDefault(); submit_service_fee()">
                     <div class="form-group">
                         <label for="">Service Charge (₦)</label>

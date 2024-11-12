@@ -1,10 +1,13 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;  
+use Illuminate\Support\Facades\Auth, Storage;  
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use App\Models\User;
 use App\Models\Order; 
+use App\Models\Item; 
+
 
 class FrontController extends Controller implements HasMiddleware
 {
@@ -12,7 +15,7 @@ class FrontController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            'guest'
+            new Middleware('guest', except: ['sales_point']),
         ];
     }
     /**
@@ -75,5 +78,17 @@ class FrontController extends Controller implements HasMiddleware
             $find->paid = 1; 
             $find->save(); 
         }
+    }
+
+
+    public function sales_point(string $branch_id)
+    {
+        $items = Item::where('branch_id', $branch_id)
+        ->where('type', ITEM)->orderBy('parent_id')->get();
+        foreach($items as $item){
+            $item->logo = asset(Storage::url($item->logo));
+        }
+        $items = $items->all();
+        return view('sales_point', compact('items')); 
     }
 }

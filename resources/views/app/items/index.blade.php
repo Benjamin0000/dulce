@@ -22,7 +22,7 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Image</th>
+                        <th></th>
                         <th>Name</th>
                         <th>Other</th>
                         <th>Created</th>

@@ -23,7 +23,7 @@ class StockController extends Controller implements HasMiddleware
         $items = Item::where([ 
             ['type', ITEM], 
             ['branch_id', $branch_id] 
-        ])->paginate(20); 
+        ])->orderBy('parent_id')->paginate(20); 
         return view('app.stock.index', compact('items', 'branch_id')); 
     }
 

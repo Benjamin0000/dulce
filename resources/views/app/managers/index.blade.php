@@ -1,14 +1,65 @@
 @extends('app.layout')
 @section('content')
 <div class="nk-block-head nk-block-head-sm">
-    <div class="row">
-        <div class="col-6"><h4 class="title">Branch Managers</h4></div>
-        <div class="col-6 text-end"><a data-bs-target="#create_manager" data-bs-toggle="modal" href="#" id="create_btn" class="btn btn-primary">Create Manager</a></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6"><h4 class="title">Branch Managers</h4></div>
+            <div class="col-6 text-end"><a data-bs-target="#create_manager" data-bs-toggle="modal" href="#" id="create_btn" class="btn btn-primary">Create Manager</a></div>
+        </div>
     </div>
 </div>
 <div class="card card-bordered h-100">
     <div class="card-inner border-bottom">
-        <div class="table-responsive">
+        <div class="d-block d-lg-none">
+            <div class="row">
+                @php $no = tableNumber(10) @endphp 
+                @foreach($managers as $manager)
+                    <div class="col-md-6" style="box-shadow: 0px 0px 1px 1px  #aaa; padding:0; margin-bottom:5px">
+                        <table class="table">
+                            <tr>
+                                <th>No</th>
+                                <td>{{$no++}}</td>
+                            </tr>
+                            <tr>
+                                <th>Name</th>
+                                <td>{{$manager->name}}</td>
+                            </tr>
+                            <tr>
+                                <th>Branch</th>
+                                <td>
+                                    @if($manager->branch)
+                                        {{$manager->branch->name}}
+                                    @else 
+                                        <span class="badge bg-danger">Not Assigned</span>
+                                    @endif 
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Created</th>
+                                <td>
+                                    {{$manager->created_at->isoFormat('lll')}}
+                                    <div>{{$manager->created_at->diffForHumans()}}</div> 
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Action</th>
+                                <td>
+                                    <button data-bs-toggle="modal" data-bs-target="#update_manager{{$manager->id}}" class="btn btn-outline-primary btn-sm"><i class="fa fa-edit"></i></button>
+                                    <button data-bs-toggle="modal" data-bs-target="#delete_manager{{$manager->id}}" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                @endforeach 
+            </div>
+        </div>
+
+        @foreach($managers as $manager)
+            @include('app.managers.delete_modal')
+            @include('app.managers.update_modal')
+        @endforeach
+
+        <div class="table-responsive d-none d-lg-block">
             <table class="table">
                 <thead>
                     <tr>
@@ -42,8 +93,6 @@
                             <td>
                                 <button data-bs-toggle="modal" data-bs-target="#update_manager{{$manager->id}}" class="btn btn-outline-primary btn-sm"><i class="fa fa-edit"></i></button>
                                 <button data-bs-toggle="modal" data-bs-target="#delete_manager{{$manager->id}}" class="btn btn-outline-danger btn-sm"><i class="fa fa-trash"></i></button>
-                                @include('app.managers.delete_modal')
-                                @include('app.managers.update_modal')
                             </td>
                         </tr>
                     @endforeach

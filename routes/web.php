@@ -12,6 +12,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('/sales-point/{branch_id}', [FrontController::class, 'sales_point']); 
+
 Route::get('/payment-complete/{order_id}', [FrontController::class, 'payment'])->name('payment_processor'); 
 Route::get('/payment-completed', [FrontController::class, 'payment_success'])->name('payment_successful'); 
 Route::get('/payment-canceled',  [FrontController::class, 'payment_canceled'])->name('payment_canceled'); 
